@@ -1,5 +1,4 @@
-﻿using KiraiMod.Core.UI.Elements;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace KiraiMod.Core.UI.SideUI.Wrappers
@@ -9,9 +8,9 @@ namespace KiraiMod.Core.UI.SideUI.Wrappers
         public static Color on = new Color32(0xCC, 0xCC, 0xFF, 0xFF);
         public static Color off = new Color32(0x56, 0x00, 0xA5, 0xFF);
 
-        private readonly BoundElement<bool> boolElem;
+        private readonly UIElement<bool> boolElem;
 
-        public ToggleWrapper(Image Background, BoundElement<bool> Element, Text text) : base(Background, Element, text)
+        public ToggleWrapper(Image Background, UIElement<bool> Element, Text text) : base(Background, Element, text)
         {
             boolElem = Element;
             boolElem.Bound.ValueChanged += value => text.color = value ? on : off;

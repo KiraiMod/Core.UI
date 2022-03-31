@@ -1,5 +1,4 @@
-﻿using KiraiMod.Core.UI.Elements;
-using KiraiMod.Core.UI.SideUI.Wrappers;
+﻿using KiraiMod.Core.UI.SideUI.Wrappers;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine.UI;
 
 namespace KiraiMod.Core.UI.SideUI
 {
-    public class SideUI : AbstractUI
+    public class SideUI : UIGroup
     {
         public static Lazy<SideUI> _globalContext = new(() =>
         {
@@ -27,10 +26,10 @@ namespace KiraiMod.Core.UI.SideUI
         public GameObject Sidebar;
         public RectTransform rect;
 
-        public SideUI(string ID) : base(ID, null) { }
-        private SideUI() : base("global.SideUI", "SideUI")
+        public SideUI(string name) : base(name) { }
+        private SideUI() : base("SideUI")
         {
-            Sidebar = ElementFactory.CreateSide(Name, UIManager.ScreenUI.transform.parent);
+            Sidebar = ElementFactory.CreateSide(name, UIManager.ScreenUI.transform.parent);
 
             rect = Sidebar.transform.Cast<RectTransform>();
             rect.sizeDelta = new(200, 0);
@@ -45,7 +44,7 @@ namespace KiraiMod.Core.UI.SideUI
             rect.position = rect.position.AddY(-12.5f);
         }
 
-        protected override BaseElement AddElement(BaseElement element)
+        public override UIElement AddElement(UIElement element)
         {
             Image image;
             Text text;
@@ -53,22 +52,22 @@ namespace KiraiMod.Core.UI.SideUI
 
             switch (element)
             {
-                case BoundElement<bool> elemBool:
-                    (image, text) = ElementFactory.CreateElement(Sidebar, elemBool.Name);
+                case UIElement<bool> elemBool:
+                    (image, text) = ElementFactory.CreateElement(Sidebar, elemBool.name);
                     container = new ToggleWrapper(image, elemBool, text);
                     break;
 
-                case BoundElement<SideUI> elemMenu:
+                case UIElement<SideUI> elemMenu:
                     if (elemMenu.Bound._value is null) return null;
 
-                    (image, text) = ElementFactory.CreateElement(Sidebar, $"< {elemMenu.Name} >");
+                    (image, text) = ElementFactory.CreateElement(Sidebar, $"< {elemMenu.name} >");
 
                     SideUI ui = elemMenu.Bound._value;
-                    ui.Sidebar = ElementFactory.CreateSide(elemMenu.Name, Sidebar.transform);
+                    ui.Sidebar = ElementFactory.CreateSide(elemMenu.name, Sidebar.transform);
                     ui.Parent = this;
                     ui.rect = ui.Sidebar.transform.Cast<RectTransform>();
                     ui.rect.sizeDelta = new(200, 0);
-                    ui.rect.localPosition = new(201, 87.5f);
+                    ui.rect.localPosition = new(201, 12.5f);
                     ui.Sidebar.active = false;
 
                     container = new SideUIWrapper(image, elemMenu, text);
@@ -80,21 +79,13 @@ namespace KiraiMod.Core.UI.SideUI
 
             IncreaseSize();
 
+            base.AddElement(element);
+
             Wrappers.Add(container);
             if (Wrappers.Count == 1)
                 Controller.Redraw();
 
             return element;
-        }
-
-        public override bool RemoveElement(BaseElement element)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool RemoveElement(string element)
-        {
-            throw new NotImplementedException();
         }
     }
 }

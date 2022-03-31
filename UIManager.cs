@@ -1,10 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace KiraiMod.Core.UI
 {
     public static class UIManager
     {
-        public static Dictionary<string, AbstractUI> UIs = new();
+        public static readonly List<UIGroup> HighGroups = new();
+        public static event Action<UIGroup> HighGroupAdded;
+
+        public static void RegisterHighGroup(UIGroup group)
+        {
+            HighGroups.Add(group);
+            HighGroupAdded?.Invoke(group);
+        }
 
         public static UnityEngine.GameObject ScreenUI
         {

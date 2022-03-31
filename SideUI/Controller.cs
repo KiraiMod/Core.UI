@@ -1,5 +1,4 @@
-﻿using KiraiMod.Core.UI.Elements;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

@@ -1,11 +1,10 @@
-﻿using KiraiMod.Core.UI.Elements;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace KiraiMod.Core.UI.SideUI
 {
     public class BaseWrapper
     {
-        public BaseWrapper(Image Background, BaseElement Element, Text Text)
+        public BaseWrapper(Image Background, UIElement Element, Text Text)
         {
             this.Background = Background;
             this.Element = Element;
@@ -14,7 +13,7 @@ namespace KiraiMod.Core.UI.SideUI
 
         public Image Background;
         public Text Text;
-        public BaseElement Element;
+        public UIElement Element;
 
         public virtual void OnLeft() => Controller.OnBack();
 
