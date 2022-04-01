@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
+using BepInEx.Logging;
 
 namespace KiraiMod.Core.UI
 {
@@ -8,6 +9,19 @@ namespace KiraiMod.Core.UI
     {
         const string GUID = "me.kiraihooks.KiraiMod.Core.UI";
 
-        public override void Load() { }
+        internal static ManualLogSource log;
+
+        public override void Load()
+        {
+            log = Log;
+
+            SideUI.Adapter.Initialize();
+
+            global::KiraiMod.Managers.GUIManager.OnLoad += ()=>{
+            UIGroup g = new("Movement");
+            g.RegisterAsHighest();
+            g.AddElement("test", 5.0f);
+            };
+        }
     }
 }

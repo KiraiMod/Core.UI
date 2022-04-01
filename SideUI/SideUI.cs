@@ -57,6 +57,11 @@ namespace KiraiMod.Core.UI.SideUI
                     container = new ToggleWrapper(image, elemBool, text);
                     break;
 
+                case UIElement<float> elemFloat:
+                    (image, text) = ElementFactory.CreateElement(Sidebar, $"[ {elemFloat.name} ]");
+                    container = new SliderWrapper(image, elemFloat, text);
+                    break;
+
                 case UIElement<SideUI> elemMenu:
                     if (elemMenu.Bound._value is null) return null;
 
