@@ -11,17 +11,6 @@ namespace KiraiMod.Core.UI
 
         internal static ManualLogSource log;
 
-        public override void Load()
-        {
-            log = Log;
-
-            SideUI.Adapter.Initialize();
-
-            global::KiraiMod.Managers.GUIManager.OnLoad += ()=>{
-            UIGroup g = new("Movement");
-            g.RegisterAsHighest();
-            g.AddElement("test", 5.0f);
-            };
-        }
+        public override void Load() => log = Log;
     }
 }

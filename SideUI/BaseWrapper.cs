@@ -15,8 +15,9 @@ namespace KiraiMod.Core.UI.SideUI
         public Text Text;
         public UIElement Element;
 
+        public virtual void OnSelected() { }
+        public virtual void OnUnselected() { }
         public virtual void OnLeft() => Controller.OnBack();
-
         public virtual void OnRight() { }
     }
 }

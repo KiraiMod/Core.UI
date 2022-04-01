@@ -28,15 +28,21 @@ namespace KiraiMod.Core.UI.SideUI
         public static void Redraw()
         {
             if (previous != null)
+            {
                 previous.Background.color = Color.black;
+                previous.OnUnselected();
+            }
+
             (previous = current.Wrappers[index]).Background.color = highlight;
+            previous.OnSelected();
         }
 
         private static void OnUp()
         {
             index--;
-            if (index < 0) 
+            if (index < 0)
                 index = 0;
+
             Redraw();
         }
 
@@ -45,6 +51,7 @@ namespace KiraiMod.Core.UI.SideUI
             index++;
             if (index >= current.Wrappers.Count)
                 index = current.Wrappers.Count - 1;
+
             Redraw();
         }
 
