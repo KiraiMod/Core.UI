@@ -30,7 +30,9 @@ namespace KiraiMod.Core.UI.SideUI.Wrappers
 
         public override void OnSelected() => repr.active = true;
         public override void OnUnselected() => repr.active = false;
-        public override void OnLeft() => floatElem.Bound.Value = floatElem.Bound._value - 0.1f;
-        public override void OnRight() => floatElem.Bound.Value = floatElem.Bound._value + 0.1f;
+        public override void OnLeft() => floatElem.Bound.Value = floatElem.Bound._value - GetAmount();
+        public override void OnRight() => floatElem.Bound.Value = floatElem.Bound._value + GetAmount();
+
+        private static float GetAmount() => Input.GetKey(KeyCode.LeftAlt) ? 0.1f : Input.GetKey(KeyCode.LeftShift) ? 10 : 1;
     }
 }

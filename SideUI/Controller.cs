@@ -39,6 +39,9 @@ namespace KiraiMod.Core.UI.SideUI
 
         private static void OnUp()
         {
+            if (Input.GetKey(KeyCode.LeftControl))
+                OpenParent();
+
             index--;
             if (index < 0)
                 index = 0;
@@ -48,6 +51,9 @@ namespace KiraiMod.Core.UI.SideUI
 
         private static void OnDown()
         {
+            if (Input.GetKey(KeyCode.LeftControl))
+                OpenParent();
+
             index++;
             if (index >= current.Wrappers.Count)
                 index = current.Wrappers.Count - 1;
@@ -55,10 +61,24 @@ namespace KiraiMod.Core.UI.SideUI
             Redraw();
         }
 
-        private static void OnLeft() => current.Wrappers[index].OnLeft();
+        private static void OnLeft()
+        {
+            if (Input.GetKey(KeyCode.LeftControl))
+                OpenParent();
+
+            current.Wrappers[index].OnLeft();
+        }
+
         private static void OnRight() => current.Wrappers[index].OnRight();
 
-        public static void OnBack()
+        private static void OnBack()
+        {
+            if (Input.GetKey(KeyCode.LeftControl))
+                while (current.Parent != null)
+                    OpenParent();
+        }
+
+        public static void OpenParent()
         {
             if (current.Parent != null)
             {

@@ -14,6 +14,7 @@ namespace KiraiMod.Core.UI.SideUI.Wrappers
             Controller.current.Sidebar.active = true;
             Controller.prevIndexes.Add(Controller.index);
             Controller.index = 0;
+            Controller.previous = null;
             Controller.Redraw();
         }
     }
