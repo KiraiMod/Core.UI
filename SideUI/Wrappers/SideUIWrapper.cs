@@ -4,13 +4,13 @@ namespace KiraiMod.Core.UI.SideUI.Wrappers
 {
     public class SideUIWrapper : BaseWrapper
     {
-        private static UIElement<SideUI> _element;
+        public new readonly UIElement<SideUI> Element;
 
-        public SideUIWrapper(Image Background, UIElement<SideUI> Element, Text Text) : base(Background, Element, Text) => _element = Element;
+        public SideUIWrapper(Image Background, UIElement<SideUI> Element, Text Text) : base(Background, Element, Text) => this.Element = Element;
 
         public override void OnRight()
         {
-            Controller.current = _element.Bound._value;
+            Controller.current = Element.Bound._value;
             Controller.current.Sidebar.active = true;
             Controller.prevIndexes.Add(Controller.index);
             Controller.index = 0;

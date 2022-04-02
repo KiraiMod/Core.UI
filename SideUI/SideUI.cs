@@ -42,6 +42,13 @@ namespace KiraiMod.Core.UI.SideUI
         {
             rect.sizeDelta = rect.sizeDelta.AddY(25);
             rect.position = rect.position.AddY(-12.5f);
+
+            foreach (BaseWrapper wrapper in Wrappers)
+                if (wrapper is SideUIWrapper submenu)
+                {
+                    var a = submenu.Element.Bound._value;
+                    a.Sidebar.transform.localPosition = a.Sidebar.transform.localPosition.AddY(12.5f);
+                }
         }
 
         public override UIElement AddElement(UIElement element)
@@ -72,7 +79,7 @@ namespace KiraiMod.Core.UI.SideUI
                     ui.Parent = this;
                     ui.rect = ui.Sidebar.transform.Cast<RectTransform>();
                     ui.rect.sizeDelta = new(200, 0);
-                    ui.rect.localPosition = new(201, 12.5f);
+                    ui.rect.localPosition = new(201, (Wrappers.Count + 1) * 12.5f);
                     ui.Sidebar.active = false;
 
                     container = new SideUIWrapper(image, elemMenu, text);

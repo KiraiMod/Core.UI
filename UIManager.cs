@@ -16,7 +16,7 @@ namespace KiraiMod.Core.UI
 
         public static UnityEngine.GameObject ScreenUI
         {
-            get => global::KiraiMod.Managers.GUIManager.UserInterface;
+            get => LegacyGUIManager.UserInterface;
         }
     }
 }

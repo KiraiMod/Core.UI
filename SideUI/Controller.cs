@@ -55,15 +55,8 @@ namespace KiraiMod.Core.UI.SideUI
             Redraw();
         }
 
-        private static void OnLeft()
-        {
-            current.Wrappers[index].OnLeft();
-        }
-
-        private static void OnRight()
-        {
-            current.Wrappers[index].OnRight();
-        }
+        private static void OnLeft() => current.Wrappers[index].OnLeft();
+        private static void OnRight() => current.Wrappers[index].OnRight();
 
         public static void OnBack()
         {
