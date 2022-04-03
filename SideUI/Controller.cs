@@ -76,6 +76,7 @@ namespace KiraiMod.Core.UI.SideUI
             if (Input.GetKey(KeyCode.LeftControl))
                 while (current.Parent != null)
                     OpenParent();
+            else OpenParent();
         }
 
         public static void OpenParent()
