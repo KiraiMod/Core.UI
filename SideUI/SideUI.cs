@@ -33,9 +33,9 @@ namespace KiraiMod.Core.UI.SideUI
 
             rect = Sidebar.transform.Cast<RectTransform>();
             rect.sizeDelta = new(200, 0);
+            rect.localPosition = new(101, -80);
             rect.anchorMin = new(0, 1);
             rect.anchorMax = new(0, 1);
-            rect.position = new(101, 1337.5f);
         }
 
         public void IncreaseSize()
