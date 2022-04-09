@@ -41,7 +41,6 @@ namespace KiraiMod.Core.UI.SideUI
         {
             if (Input.GetKey(KeyCode.LeftControl))
                 OpenParent();
-
             index--;
             if (index < 0)
                 index = 0;
@@ -51,10 +50,10 @@ namespace KiraiMod.Core.UI.SideUI
 
         private static void OnDown()
         {
-            if (Input.GetKey(KeyCode.LeftControl))
+              if (Input.GetKey(KeyCode.LeftControl))
                 OpenParent();
 
-            index++;
+          index++;
             if (index >= current.Wrappers.Count)
                 index = current.Wrappers.Count - 1;
 

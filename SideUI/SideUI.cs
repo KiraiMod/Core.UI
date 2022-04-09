@@ -15,7 +15,7 @@ namespace KiraiMod.Core.UI.SideUI
             return ui;
         });
 
-        public static SideUI GlobalContext 
+        public static SideUI GlobalContext
         {
             get => _globalContext.Value;
         }
@@ -65,14 +65,14 @@ namespace KiraiMod.Core.UI.SideUI
                     break;
 
                 case UIElement<float> elemFloat:
-                    (image, text) = ElementFactory.CreateElement(Sidebar, $"[ {elemFloat.name} ]");
+                    (image, text) = ElementFactory.CreateElement(Sidebar, "[ " + elemFloat.name + " ]");
                     container = new SliderWrapper(image, elemFloat, text);
                     break;
 
                 case UIElement<SideUI> elemMenu:
                     if (elemMenu.Bound._value is null) return null;
 
-                    (image, text) = ElementFactory.CreateElement(Sidebar, $"< {elemMenu.name} >");
+                    (image, text) = ElementFactory.CreateElement(Sidebar, "< " + elemMenu.name + " >");
 
                     SideUI ui = elemMenu.Bound._value;
                     ui.Sidebar = ElementFactory.CreateSide(elemMenu.name, Sidebar.transform);
@@ -86,7 +86,13 @@ namespace KiraiMod.Core.UI.SideUI
                     break;
 
                 default:
-                    return null;
+                    if (element.GetType() == typeof(UIElement))
+                    {
+                        (image, text) = ElementFactory.CreateElement(Sidebar, "( " + element.name + " )");
+                        container = new ButtonWrapper(image, element, text);
+                        break;
+                    }
+                    else return null;
             }
 
             IncreaseSize();

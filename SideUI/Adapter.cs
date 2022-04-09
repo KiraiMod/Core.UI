@@ -9,16 +9,24 @@
             if (hasInitialized) return;
             hasInitialized = true;
 
-            UIManager.HighGroupAdded += HandleGroup;
-            UIManager.HighGroups.ForEach(HandleGroup);
+            UIManager.HighGroups.ForEach(HandleHighGroup);
+            UIManager.HighGroupAdded += HandleHighGroup;
         }
 
-        private static void HandleGroup(UIGroup group)
+        private static void HandleHighGroup(UIGroup group) => HandleGroup(SideUI.GlobalContext, group);
+        private static void HandleGroup(SideUI parent, UIGroup group)
         {
             SideUI ui = new(group.name);
-            SideUI.GlobalContext.AddElement(new UIElement<SideUI>(group.name, ui));
-            group.ElementAdded += element => ui.AddElement(element);
-            ui.elements.ForEach(element => ui.AddElement(element));
+            parent.AddElement(new UIElement<SideUI>(group.name, ui));
+            ui.elements.ForEach(element => AddElement(ui, element));
+            group.ElementAdded += element => AddElement(ui, element);
+        }
+
+        private static void AddElement(SideUI ui, UIElement element)
+        {
+            if (element is UIElement<UIGroup> subgroup)
+                HandleGroup(ui, subgroup.Bound._value);
+            else ui.AddElement(element);
         }
     }
 }

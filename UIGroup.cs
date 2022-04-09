@@ -13,6 +13,7 @@ namespace KiraiMod.Core.UI
         public readonly string name;
 
         public UIGroup(string name) => this.name = name;
+        public UIGroup(string name, UIGroup parent) : this(name) => parent.AddElement(name, this);
 
         /// <summary> This will register your group as a top level group </summary>
         public virtual void RegisterAsHighest() => UIManager.RegisterHighGroup(this);
@@ -21,6 +22,7 @@ namespace KiraiMod.Core.UI
         public UIElement<T> AddElement<T>(string name, T value) => (UIElement<T>)AddElement(new UIElement<T>(name, value));
         public UIElement<T> AddElement<T>(string name) => (UIElement<T>)AddElement(new UIElement<T>(name));
         public UIElement<T> AddElement<T>(string name, Bound<T> bound) => (UIElement<T>)AddElement(new UIElement<T>(name, bound));
+        public UIElement AddElement(string name) => AddElement(new UIElement(name));
 
         /// <remarks> Some implementations may require that the current group is already registered </remarks>
         public virtual UIElement AddElement(UIElement element)
