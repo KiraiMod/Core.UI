@@ -21,7 +21,16 @@ namespace KiraiMod.Core.UI
         // these overloads are for convenience and are not intended to be overloaded
         public UIElement<T> AddElement<T>(string name, T value) => (UIElement<T>)AddElement(new UIElement<T>(name, value));
         public UIElement<T> AddElement<T>(string name) => (UIElement<T>)AddElement(new UIElement<T>(name));
+
         public UIElement<T> AddElement<T>(string name, Bound<T> bound) => (UIElement<T>)AddElement(new UIElement<T>(name, bound));
+        public UIElement<T> AddElement<T>(string name, MemoryEntry<T> entry)
+        {
+            var elem = (UIElement<T>)AddElement(new UIElement<T>(name, entry.Value));
+            elem.Bound.ValueChanged += value => entry.Value = value;
+            entry.ValueChanged += value => elem.Bound.Value = value;
+            return elem;
+        }
+
         public UIElement AddElement(string name) => AddElement(new UIElement(name));
 
         /// <remarks> Some implementations may require that the current group is already registered </remarks>
