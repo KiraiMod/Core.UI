@@ -1,4 +1,7 @@
-﻿using System;
+﻿using KiraiMod.Core.ModuleAPI;
+using System;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -71,9 +74,85 @@ namespace KiraiMod.Core.UI
             Pinned.transform.SetParent(GUI.transform);
 
             OnLoad?.StableInvoke();
+
+            MemberAttribute.Added += HandleMember; 
+            MemberAttribute.All.ForEach(HandleMember);
+
             OnLoadLate?.StableInvoke();
 
             Plugin.log.LogInfo("Loaded GUI");
+        }
+
+        private static void HandleMember(MemberAttribute member)
+        {
+            if (member is KeybindAttribute || member.GetType().GetGenericTypeDefinition() == typeof(KeybindAttribute<>))
+                return;
+
+            UIElement element;
+            if (member is BaseConfigureAttribute configure)
+                element = (UIElement)typeof(LegacyGUIManager)
+                    .GetMethod(nameof(CreateTypedElement), BindingFlags.NonPublic | BindingFlags.Static)
+                    .MakeGenericMethod(member.GetType().GenericTypeArguments[0])
+                    .Invoke(null, new object[1] { configure });
+            else if (member is InteractAttribute interact)
+            {
+                element = new(interact.Name);
+                element.Changed += interact.Invoke;
+            }
+            else return;
+
+            string[] sections = member.Section == null ? Array.Empty<string>() : member.Section.Split(".");
+
+            string highest;
+            if (sections.Length == 0)
+                highest = null;
+            else highest = sections[0];
+
+            // this needs to be rewritten
+            UIGroup lowest = null;
+            foreach (UIGroup group in UIManager.HighGroups)
+                if (group.name == highest)
+                {
+                    lowest = group;
+                    break;
+                }
+
+            if (lowest == null)
+            {
+                lowest = new(highest);
+                lowest.RegisterAsHighest();
+            }
+
+            foreach (string section in sections.Skip(1))
+            {
+                bool found = false;
+
+                foreach (UIElement elem in lowest.elements)
+                {
+                    if (elem is UIElement<UIGroup> group && elem.name == section)
+                    {
+                        lowest = group.Bound._value;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    Plugin.log.LogDebug("Creating new section: " + section);
+                    lowest = new(section, lowest);
+                }
+            }
+
+            lowest.AddElement(element);
+        }
+
+        private static UIElement<T> CreateTypedElement<T>(BaseConfigureAttribute attribute)
+        {
+            UIElement<T> element = new(attribute.Name);
+            element.Bound.ValueChanged += value => attribute.DynamicValue = value;
+            attribute.DynamicValueChanged += value => element.Bound.Value = value;
+            return element;
         }
     }
 }
