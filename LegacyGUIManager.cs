@@ -101,12 +101,10 @@ namespace KiraiMod.Core.UI
             }
             else return;
 
-            string[] sections = member.Section == null ? Array.Empty<string>() : member.Section.Split(".");
-
             string highest;
-            if (sections.Length == 0)
+            if (member.Parts.Length == 1)
                 highest = null;
-            else highest = sections[0];
+            else highest = member.Parts[0];
 
             // this needs to be rewritten
             UIGroup lowest = null;
@@ -123,7 +121,7 @@ namespace KiraiMod.Core.UI
                 lowest.RegisterAsHighest();
             }
 
-            foreach (string section in sections.Skip(1))
+            foreach (string section in member.Parts[1..^1])
             {
                 bool found = false;
 
@@ -149,7 +147,7 @@ namespace KiraiMod.Core.UI
 
         private static UIElement<T> CreateTypedElement<T>(BaseConfigureAttribute attribute)
         {
-            UIElement<T> element = new(attribute.Name);
+            UIElement<T> element = new(attribute.Name, attribute.DynamicValue);
             element.Bound.ValueChanged += value => attribute.DynamicValue = value;
             attribute.DynamicValueChanged += value => element.Bound.Value = value;
             return element;
