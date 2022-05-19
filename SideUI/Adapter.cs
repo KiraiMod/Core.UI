@@ -1,7 +1,4 @@
-﻿using KiraiMod.Core.ModuleAPI;
-using System;
-
-namespace KiraiMod.Core.UI.SideUI
+﻿namespace KiraiMod.Core.UI.SideUI
 {
     public static class Adapter
     {
