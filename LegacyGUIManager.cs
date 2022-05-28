@@ -85,7 +85,7 @@ namespace KiraiMod.Core.UI
 
         private static void HandleMember(MemberAttribute member)
         {
-            if (member is KeybindAttribute || member.GetType().GetGenericTypeDefinition() == typeof(KeybindAttribute<>))
+            if (member is KeybindAttribute || member.GetType().IsGenericTypeDefinition && member.GetType().GetGenericTypeDefinition() == typeof(KeybindAttribute<>))
                 return;
 
             UIElement element;
@@ -101,10 +101,7 @@ namespace KiraiMod.Core.UI
             }
             else return;
 
-            string highest;
-            if (member.Parts.Length == 1)
-                highest = null;
-            else highest = member.Parts[0];
+            string highest = member.Parts.Length == 1 ? null : member.Parts[0];
 
             // this needs to be rewritten
             UIGroup lowest = null;
@@ -127,19 +124,18 @@ namespace KiraiMod.Core.UI
 
                 foreach (UIElement elem in lowest.elements)
                 {
-                    if (elem is UIElement<UIGroup> group && elem.name == section)
-                    {
-                        lowest = group.Bound._value;
-                        found = true;
-                        break;
-                    }
+                    if (elem is not UIElement<UIGroup> group || elem.name != section)
+                        continue;
+                    
+                    lowest = group.Bound._value;
+                    found = true;
+                    break;
                 }
 
-                if (!found)
-                {
-                    Plugin.log.LogDebug("Creating new section: " + section);
-                    lowest = new(section, lowest);
-                }
+                if (found) continue;
+                
+                Plugin.log.LogDebug("Creating new section: " + section);
+                lowest = new(section, lowest);
             }
 
             lowest.AddElement(element);
