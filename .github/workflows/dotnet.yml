@@ -42,7 +42,7 @@ jobs:
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: |
-            bin/Release/netstandard2.1/KiraiMod.Core.dll
+            bin/Release/netstandard2.1/KiraiMod.Core.UI.dll
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
