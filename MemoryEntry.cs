@@ -12,11 +12,11 @@ namespace KiraiMod.Core.UI
             set
             {
                 value = ClampValue(value);
-                if (!Equals(_value, value))
-                {
-                    _value = value;
-                    OnSettingChanged(this);
-                }
+                if (Equals(_value, value))
+                    return;
+                
+                _value = value;
+                OnSettingChanged(this);
             }
         }
 

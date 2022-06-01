@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 namespace KiraiMod.Core.UI
 {
+    [Module]
     public static class LegacyGUIManager
     {
         public static event Action OnLoad;
@@ -22,12 +23,13 @@ namespace KiraiMod.Core.UI
         private static BaseInputModule inputFix;
         private static BaseInputModule inputOrig;
 
+        [Configure<bool>("Visuals.Legacy UI", false, Saved: false)]
         public static bool Showing
         {
-            get => UserInterface.active;
+            get => UserInterface != null && UserInterface.active;
             set
             {
-                if (UserInterface.active == value)
+                if (Showing == value)
                     return;
 
                 UserInterface.active = value;
@@ -41,7 +43,7 @@ namespace KiraiMod.Core.UI
         {
             Events.UIManagerLoaded += OnUIManagerLoaded;
 
-            Plugin.cfg.Bind("GUI", "Keybind", new Key[] { Key.RightShift }, "The keybind you want to use to open the GUI").Register(() => Showing ^= true);
+            Plugin.Configuration.Bind("GUI", "Keybind", new Key[] { Key.RightShift }, "The keybind you want to use to open the GUI").Register(() => Showing ^= true);
         }
 
         private static void OnUIManagerLoaded()
@@ -52,7 +54,7 @@ namespace KiraiMod.Core.UI
 
         private static void SetupFix()
         {
-            var sys = GameObject.Find("_Application/UiEventSystem");
+            GameObject sys = GameObject.Find("_Application/UiEventSystem");
             inputOrig = sys.GetComponent<EventSystem>().m_SystemInputModules[0];
             (inputFix = sys.AddComponent<StandaloneInputModule>()).enabled = false;
         }
@@ -80,7 +82,7 @@ namespace KiraiMod.Core.UI
 
             OnLoadLate?.StableInvoke();
 
-            Plugin.log.LogInfo("Loaded GUI");
+            Plugin.Logger.LogInfo("Loaded GUI");
         }
 
         private static void HandleMember(MemberAttribute member)
@@ -134,7 +136,7 @@ namespace KiraiMod.Core.UI
 
                 if (found) continue;
                 
-                Plugin.log.LogDebug("Creating new section: " + section);
+                Plugin.Logger.LogDebug("Creating new section: " + section);
                 lowest = new(section, lowest);
             }
 

@@ -11,15 +11,16 @@ namespace KiraiMod.Core.UI
     {
         public const string GUID = "me.kiraihooks.KiraiMod.Core.UI";
 
-        internal static ManualLogSource log;
-        internal static ConfigFile cfg;
+        internal static ManualLogSource Logger;
+        internal static ConfigFile Configuration;
 
         public override void Load()
         {
-            log = Log;
-            cfg = Config;
+            Logger = Log;
+            Configuration = Config;
 
             typeof(LegacyGUIManager).Initialize();
+            Managers.ModuleManager.Register();
         }
     }
 }
