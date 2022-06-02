@@ -5,7 +5,7 @@ using BepInEx.Logging;
 
 namespace KiraiMod.Core.UI
 {
-    [BepInPlugin(GUID, "KM.Core.GUI", "0.1.0")]
+    [BepInPlugin(GUID, "KM.Core.UI", "0.1.0")]
     [BepInDependency(Core.Plugin.GUID)]
     public class Plugin : BasePlugin
     {
