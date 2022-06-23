@@ -103,7 +103,7 @@ namespace KiraiMod.Core.UI
             }
             else return;
 
-            string highest = member.Parts.Length == 1 ? null : member.Parts[0];
+            string highest = member.Parts.Length == 1 ? "Uncategorized" : member.Parts[0];
 
             // this needs to be rewritten
             UIGroup lowest = null;
@@ -120,25 +120,26 @@ namespace KiraiMod.Core.UI
                 lowest.RegisterAsHighest();
             }
 
-            foreach (string section in member.Parts[1..^1])
-            {
-                bool found = false;
-
-                foreach (UIElement elem in lowest.elements)
+            if (member.Parts.Length >= 2)
+                foreach (string section in member.Parts[1..^1])
                 {
-                    if (elem is not UIElement<UIGroup> group || elem.name != section)
-                        continue;
-                    
-                    lowest = group.Bound._value;
-                    found = true;
-                    break;
-                }
+                    bool found = false;
 
-                if (found) continue;
-                
-                Plugin.Logger.LogDebug("Creating new section: " + section);
-                lowest = new(section, lowest);
-            }
+                    foreach (UIElement elem in lowest.elements)
+                    {
+                        if (elem is not UIElement<UIGroup> group || elem.name != section)
+                            continue;
+                        
+                        lowest = group.Bound._value;
+                        found = true;
+                        break;
+                    }
+
+                    if (found) continue;
+                    
+                    Plugin.Logger.LogDebug("Creating new section: " + section);
+                    lowest = new(section, lowest);
+                }
 
             lowest.AddElement(element);
         }
